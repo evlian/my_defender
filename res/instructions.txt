@@ -1,0 +1,17 @@
+INSTRUCTIONS
+
+Defend  your  castle  against  enemies  by  deploying  towers!
+
+Simply  select  a  tower  from  the  tower  selector  and  deploy  it
+near  the  path  where  the  enemy  will  pass.
+
+Every  tower  costs,  so  you  will  have  to  earn  coins  by  killing
+as  many  enemies  as  you  can!
+
+Notice  the  towers'  attacking  ranges  when  you  deploy  them,
+which  tells  you  how  far  a  tower  can  detect  and  attack  enemies.
+
+The  enemies  are  endless,  which  means  you  will  have  to  defend  for
+as  long  as  you  can!
+
+USE  MOUSE  TO  PLAY,  PRESS  Q  TO  QUIT.
