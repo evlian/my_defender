@@ -20,6 +20,7 @@ void init_scoreboard_panel(game_instance *game)
                                 new_vector_2f(WINDOW_WIDTH / 2 - 250,
                                             WINDOW_HEIGHT / 2 - 150));
     sfRectangleShape_setFillColor(game->shapes.scoreboard_panel, new_color(60, 141, 173, 225));
+    sfRectangleShape_setScale(game->shapes.scoreboard_panel, new_vector_2f(0.2, 0.2));
 }
 
 void init_scoreboard(game_instance *game)

@@ -14,6 +14,7 @@ void init_panel(game_instance *game)
                                 new_vector_2f(WINDOW_WIDTH / 2 - 400,
                                             WINDOW_HEIGHT / 2 - 150));
     sfRectangleShape_setFillColor(game->shapes.panel, new_color(0x3c, 0x8d, 0xad, 225));
+    sfRectangleShape_setScale(game->shapes.panel, new_vector_2f(0.2, 0.2));
 }
 
 void init_instructions(game_instance *game)

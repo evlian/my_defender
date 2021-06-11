@@ -27,11 +27,12 @@ void resume_button(game_instance *game)
 void restart_button(game_instance *game)
 {
     reset_game(game);
+    sfSound_stop(game->sounds.game_music);
+    sfSound_play(game->sounds.game_music);
     game->score = 0;
     game->state = ST_INGAME;
     game->show_instructions = sfFalse;
     game->show_scores = sfFalse;
-    play_music(game);
 }
 
 void main_menu_button(game_instance *game)

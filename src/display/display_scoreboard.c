@@ -9,6 +9,12 @@
 void toggle_scoreboard(game_instance *game)
 {
     game->show_scores = !game->show_scores;
+    if (game->show_scores) {
+        sfRectangleShape_setScale(game->shapes.panel, new_vector_2f(0.2, 0.2));
+        game->show_instructions = sfFalse;
+    }
+    else
+        sfRectangleShape_setScale(game->shapes.scoreboard_panel, new_vector_2f(0.2, 0.2));
 }
 
 void display_scoreboard(game_instance *game)
@@ -20,6 +26,13 @@ void display_scoreboard(game_instance *game)
     pos.x += 5;
     if (!game->show_scores)
         return;
+    if (sfRectangleShape_getScale(game->shapes.scoreboard_panel).x < 1) {
+        sfRectangleShape_scale(game->shapes.scoreboard_panel, new_vector_2f(1.1, 1.1));
+        sfRectangleShape_setPosition(game->shapes.scoreboard_panel, new_vector_2f(WINDOW_WIDTH / 2.0 - sfRectangleShape_getGlobalBounds(game->shapes.scoreboard_panel).width / 2.0,
+                                                                WINDOW_HEIGHT / 2.0 - sfRectangleShape_getGlobalBounds(game->shapes.scoreboard_panel).height / 2.0));
+        sfRenderWindow_drawRectangleShape(game->window, game->shapes.scoreboard_panel, NULL);
+        return;
+    }
     sfRenderWindow_drawRectangleShape(game->window, game->shapes.scoreboard_panel, NULL);
     sfText_setString(game->text, "SCOREBOARD");
     sfText_setCharacterSize(game->text, 36);
