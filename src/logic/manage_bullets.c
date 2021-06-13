@@ -6,11 +6,12 @@
 */
 #include "../../include/defender.h"
 
-int contains(sfVector2f a, sfVector2f b)
+int has_reached_player(bullet *b)
 {
-    sfIntRect rect = vector_to_rect(b, 32, 32);
+    sfVector2f pos = b->position;
+    sfVector2f t_pos = b->target->position;
 
-    return sfIntRect_contains(&rect, a.x, a.y);
+    return (rect_contains(pos, t_pos) || t_pos.y <= 0 || t_pos.x <= 0);
 }
 
 void hit_target(game_instance *game)
@@ -18,18 +19,13 @@ void hit_target(game_instance *game)
     bullet *temp = game->bullets;
     bullet *prev;
 
-    while (temp != NULL && (contains(temp->position, temp->target->position)
-                            || temp->target->position.y <= 0
-                            || temp->target->position.x <= 0)) {
+    while (temp != NULL && has_reached_player(temp)) {
         game->bullets = temp->next;
         free(temp);
         temp = game->bullets;
     }
     while (temp != NULL) {
-        while (temp != NULL &&
-                !contains(temp->position, temp->target->position)
-                && temp->target->position.y > 0 &&
-                temp->target->position.x > 0) {
+        while (temp != NULL && !has_reached_player(temp)) {
             prev = temp;
             temp = temp->next;
         }
@@ -48,9 +44,30 @@ void shoot_bullet(game_instance *game, tower *tower, enemy *target)
     b->parent = tower;
     b->position = b->parent->position;
     b->target = target;
+    b->target_pos = target->position;
     b->texture_rect = tower->bullet->texture_rect;
     b->next = game->bullets;
     game->bullets = b;
+}
+
+void move_bullet(bullet *b)
+{
+    sfVector2f pos = b->position;
+    sfVector2f t_pos = b->target_pos;
+    float y_diff = abs(t_pos.y - pos.y);
+    float x_diff = abs(t_pos.x - pos.x);
+
+    if (x_diff < y_diff) {
+        pos.y += pos.y < t_pos.y ? 5.0 : -5.0;
+        pos.x += pos.x < t_pos.x ? (5.0 / y_diff * x_diff) :
+                                -(5.0 / y_diff * x_diff);
+    } else {
+        pos.x += pos.x < t_pos.x ? 5.0 : -5.0;
+        pos.y += pos.y < t_pos.y ? (5.0 / x_diff * y_diff) :
+                                -(5.0 / x_diff * y_diff);
+    }
+    b->position = pos;
+    b->target_pos = t_pos;
 }
 
 void move_bullets(game_instance *game)
@@ -58,18 +75,8 @@ void move_bullets(game_instance *game)
     bullet *head = game->bullets;
 
     while (head != NULL) {
-        if (head->position.x < head->target->position.x) {
-            head->position.x += 5.0;
-        } else if (head->position.x > head->target->position.x) {
-            head->position.x -= 5.0;
-        }
-        if (head->position.y < head->target->position.y ) {
-            head->position.y += (5.0 / abs(head->target->position.x - head->position.x) *
-                                abs(head->target->position.y - head->position.y));
-        } else if (head->position.y > head->target->position.y) {
-            head->position.y -= (5.0 / abs(head->target->position.x - head->position.x) *
-                                abs(head->target->position.y - head->position.y));
-        }
+        head->target_pos = head->target->position;
+        move_bullet(head);
         head = head->next;
     }
 }

@@ -21,5 +21,6 @@ int main(int argc, char **argv)
     game_instance game;
 
     init(&game);
+    mute_sounds(&game, argv[1], argc);
     return main_loop(&game);
 }

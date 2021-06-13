@@ -74,8 +74,8 @@ void move_enemies(game_instance *game)
         head->texture_rect.top = (head->direction + (head->type * 4)) * 32;
         if (is_dead_end(game, head->direction, head->position))
             head->direction = game->tilemap.path[head->path_index++];
-        head->position.y += arr[0][head->direction] * head->speed;
-        head->position.x += arr[1][head->direction] * head->speed;
+        head->position.y += arr[0][head->direction] * speed;
+        head->position.x += arr[1][head->direction] * speed;
         head = head->next;
     }
 }

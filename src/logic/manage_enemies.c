@@ -39,7 +39,7 @@ void on_dead_enemy(game_instance *game, enemy *enemy)
 {
     sfSound_play(game->sounds.enemy_dies);
     game->score += enemy->max_health / 100;
-    game->money += enemy->max_health / 68;
+    game->money += enemy->max_health / 19;
 }
 
 void remove_dead_enemies(game_instance *game)

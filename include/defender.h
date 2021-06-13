@@ -130,6 +130,7 @@ typedef struct bullet {
     sfIntRect texture_rect;
     tower *parent;
     enemy *target;
+    sfVector2f target_pos;
     int start;
     int end;
     struct bullet *next;
@@ -335,6 +336,8 @@ char *read_file(char *file_path);
 int array_len(int *arr);
 int in_circle(sfVector2f center, int radius, sfVector2f target);
 void play_music(game_instance *game);
+int rect_contains(sfVector2f a, sfVector2f b);
+void mute_sounds(game_instance *game, char *flag, int argc);
 
 /* </FUNCTIONS> */
 
