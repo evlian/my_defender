@@ -13,14 +13,13 @@ int main_loop(game_instance *game)
         handle_logic(game);
         display(game);
     }
+    return 0;
 }
 
 int main(int argc, char **argv)
 {
     game_instance game;
 
-    setbuf(stdout, NULL);
     init(&game);
-    main_loop(&game);
-    return 0;
+    return main_loop(&game);
 }
