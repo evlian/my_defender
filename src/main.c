@@ -8,7 +8,6 @@
 
 int main_loop(game_instance *game)
 {
-    play_music(game);
     while (sfRenderWindow_isOpen(game->window)) {
         manage_events(game);
         handle_logic(game);

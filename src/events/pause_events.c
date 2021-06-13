@@ -12,11 +12,13 @@ void manage_pause_event(game_instance *game)
 
     if (game->event.type != sfEvtKeyPressed)
         return;
-    sfSound_play(game->sounds.pause);
+
     if (game->state == ST_INGAME && escape) {
+        sfSound_play(game->sounds.pause);
         sfSound_pause(game->sounds.game_music);
         game->state = ST_PAUSE;
     } else if (game->state == ST_PAUSE && escape) {
+        sfSound_play(game->sounds.pause);
         sfSound_play(game->sounds.game_music);
         game->show_instructions = sfFalse;
         game->show_scores = sfFalse;

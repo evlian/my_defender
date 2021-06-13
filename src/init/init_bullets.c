@@ -8,8 +8,8 @@
 
 void init_laser(game_instance *game)
 {
-    game->shapes.line = sfVertexArray_create();
-    sfVertexArray_setPrimitiveType(game->shapes.line, sfLines);
+    game->shapes.laser = sfVertexArray_create();
+    sfVertexArray_setPrimitiveType(game->shapes.laser, sfLines);
     game->shapes.point_one.color = sfRed;
     game->shapes.point_two.color = sfRed;
 }
@@ -20,7 +20,7 @@ void init_bullets(game_instance *game)
     bullet *a = (bullet *) malloc(sizeof(bullet));
 
     game->sprites.bullet = sfSprite_create();
-    sfSprite_setTexture(game->sprites.bullet, game->tileset.tileset, sfTrue);
+    sfSprite_setTexture(game->sprites.bullet, game->tileset.texture, sfTrue);
     init_laser(game);
     game->bullets = NULL;
     game->bullet_types = NULL;

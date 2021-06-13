@@ -13,5 +13,5 @@ void destroy_textures(game_instance *game)
     sfTexture_destroy(game->textures.game_over);
     sfTexture_destroy(game->textures.intro);
     sfTexture_destroy(game->textures.ui);
-    sfTexture_destroy(game->tileset.tileset);
+    sfTexture_destroy(game->tileset.texture);
 }

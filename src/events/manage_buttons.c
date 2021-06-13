@@ -31,9 +31,9 @@ void manage_button_hover(game_instance *game, sfVector2i mouse, button **b)
                 sfSound_play(game->sounds.hover);
             }
             b[i]->state = BTN_HOVER;
-        }
-        else
+        } else {
             b[i]->state = BTN_IDLE;
+        }
         i++;
     }
 }

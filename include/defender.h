@@ -15,8 +15,8 @@
 #include <SFML/System/Clock.h>
 #include "my.h"
 
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGHT 576
+#define W_WIDTH 1024
+#define W_HEIGHT 576
 #define FRAME_RATE 60
 #define BITS_PER_PIXEL 24
 
@@ -51,7 +51,6 @@ typedef struct tower tower;
 typedef struct sound_buffers {
     sfSoundBuffer *hover;
     sfSoundBuffer *click;
-    sfSoundBuffer *enemy_spawns;
     sfSoundBuffer *enemy_dies;
     sfSoundBuffer *intro_music;
     sfSoundBuffer *game_music;
@@ -64,7 +63,6 @@ typedef struct sound_buffers {
 typedef struct sounds {
     sfSound *hover;
     sfSound *click;
-    sfSound *enemy_spawns;
     sfSound *enemy_dies;
     sfSound *intro_music;
     sfSound *game_music;
@@ -98,6 +96,7 @@ typedef struct buttons {
     button scores;
     button restart;
     button main_menu;
+    button settings;
 } buttons;
 
 typedef struct sprites {
@@ -117,6 +116,7 @@ typedef struct enemy {
     float speed;
     float slow_attack;
     short direction;
+    short type;
     sfVector2f position;
     sfIntRect texture_rect;
     sfClock *clock;
@@ -156,7 +156,7 @@ typedef struct tile {
 } tile;
 
 typedef struct tileset {
-    sfTexture *tileset;
+    sfTexture *texture;
     int size;
     int tile_size;
 } tileset;
@@ -174,20 +174,20 @@ typedef struct tilemap {
 typedef struct shapes {
     sfRectangleShape *tower_bar;
     sfRectangleShape *pause_background;
-    sfRectangleShape *health_bar;
-    sfRectangleShape *health_bar_outline;
+    sfRectangleShape *hp_bar;
+    sfRectangleShape *hp_bar_outline;
     sfRectangleShape *tower_highlighter;
-    sfRectangleShape *panel;
-    sfRectangleShape *scoreboard_panel;
+    sfRectangleShape *info_panel;
+    sfRectangleShape *scores_panel;
+    sfRectangleShape *settings_panel;
     sfCircleShape *radius;
     sfCircleShape *winter;
-    sfVertexArray *line;
+    sfVertexArray *laser;
     sfVertex point_one;
     sfVertex point_two;
 } shapes;
 
 typedef struct game_instance{
-    sfVideoMode mode;
     sfRenderWindow *window;
     tilemap tilemap;
     tileset tileset;
@@ -204,6 +204,7 @@ typedef struct game_instance{
     button **pause_menu_buttons;
     sfText *text;
     enemy *enemies;
+    enemy *enemy_types;
     tower *towers;
     char *instructions;
     sfEvent event;
@@ -219,6 +220,7 @@ typedef struct game_instance{
     int state;
     int show_instructions;
     int show_scores;
+    int show_settings;
     int build_mode;
     int score;
     int money;
@@ -306,7 +308,7 @@ void free_enemies(game_instance *game);
 void free_towers(game_instance *game);
 void free_bullets(game_instance *game);
 void reset_game(game_instance *game);
-void init_settings(game_instance *game);
+void set_settings(game_instance *game);
 void destroy_sounds(game_instance *game);
 void free_lists(game_instance *game);
 void destroy_textures(game_instance *game);
@@ -319,4 +321,5 @@ int sort(int *list, int size, int ascending);
 void init_scoreboard(game_instance *game);
 void display_scoreboard(game_instance *game);
 int array_len(int *arr);
+void animate_panel(game_instance *game, sfRectangleShape *r);
 #endif /* !my_defender */

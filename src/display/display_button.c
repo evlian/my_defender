@@ -10,19 +10,14 @@ void display_button(game_instance *game, button *button)
 {
     sfIntRect rect = new_int_rect(190, 49, 0, 0);
     sfVector2f pos = button->position;
+    int len = my_strlen(button->text);
 
     pos.x += 10;
-    if (button->state == BTN_HOVER) {
-        pos.y += 4;
-        rect.top = 49;
-    }
+    pos.y += (button->state == BTN_HOVER) ? 4 : 0;
+    rect.top = (button->state == BTN_HOVER) ? 49 : 0;
+    pos.y += (len > 9) ? 4 : 0;
+    sfText_setCharacterSize(game->text, (len > 9) ? 19 : 25);
     sfText_setString(game->text, button->text);
-    if (my_strlen(sfText_getString(game->text)) > 9) {
-        sfText_setCharacterSize(game->text, 19);
-        pos.y += 4;
-    }
-    else
-        sfText_setCharacterSize(game->text, 25);
     sfText_setPosition(game->text, pos);
     sfSprite_setPosition(game->sprites.button, button->position);
     sfSprite_setTextureRect(game->sprites.button, rect);

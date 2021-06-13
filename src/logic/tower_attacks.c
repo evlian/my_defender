@@ -6,52 +6,48 @@
 */
 #include "../../include/defender.h"
 
-int in_circle(sfVector2f center, int radius, sfVector2f target)
+void manage_shooter_attack(game_instance *game, float time, enemy *e,
+                            tower *t, sfSound *s)
 {
-    float square_dist = pow((center.x - target.x), 2)
-                        + pow((center.y - target.y), 2);
-    return square_dist <= pow(radius, 2);
+    if (sfTime_asSeconds(sfClock_getElapsedTime(t->attack_clock)) > time) {
+        e->health -= t->attack;
+        sfClock_restart(t->attack_clock);
+        shoot_bullet(game, t, e);
+        sfSound_play(s);
+    }
 }
 
-int get_dist(sfVector2f center, sfVector2f target)
-{
-    return pow((center.x - target.x), 2) + pow((center.y - target.y), 2);
-}
-
-void hit_targets(game_instance *game, tower *tower)
+enemy *get_first_enemy(game_instance *game, tower *tower)
 {
     enemy *t = NULL;
     enemy *enemy = game->enemies;
 
     while (enemy != NULL) {
-        if (in_circle(tower->position, tower->radius, enemy->position)) {
+        if (in_circle(tower->position, tower->radius, enemy->position))
             t = enemy;
-        }
         enemy = enemy->next;
     }
-    if (t != NULL)
-        switch (tower->attack_type) {
-            case ATK_LASER:
-                t->health -= tower->attack;
-                break;
-            case ATK_MORTAR:
-                if (sfTime_asSeconds(sfClock_getElapsedTime(tower->attack_clock)) > 0.3) {
-                    t->health -= tower->attack;
-                    sfClock_restart(tower->attack_clock);
-                    shoot_bullet(game, tower, t);
-                    sfSound_play(game->sounds.mortar);
-                }
-                break;
-            case ATK_ARROW:
-                if (sfTime_asSeconds(sfClock_getElapsedTime(tower->attack_clock)) > 0.2) {
-                    t->health -= tower->attack;
-                    sfClock_restart(tower->attack_clock);
-                    shoot_bullet(game, tower, t);
-                    sfSound_play(game->sounds.archer);
-                }
-                break;
-            default:
-                break;
+    return t;
+}
+
+void hit_targets(game_instance *game, tower *tower)
+{
+    enemy *t = get_first_enemy(game, tower);
+
+    if (t == NULL)
+        return;
+    switch (tower->attack_type) {
+        case ATK_LASER:
+            t->health -= tower->attack;
+            break;
+        case ATK_MORTAR:
+            manage_shooter_attack(game, 0.3, t, tower, game->sounds.mortar);
+            break;
+        case ATK_ARROW:
+            manage_shooter_attack(game, 0.2, t, tower, game->sounds.archer);
+            break;
+        default:
+            break;
     }
 }
 

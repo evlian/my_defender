@@ -11,7 +11,7 @@ void reset_game(game_instance *game)
     free_enemies(game);
     free_towers(game);
     free_bullets(game);
-    init_settings(game);
+    set_settings(game);
 }
 
 int is_game_over(game_instance *game, sfVector2f pos)

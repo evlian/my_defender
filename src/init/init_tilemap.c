@@ -26,32 +26,28 @@ tile **new_tilemap(int rows, int cols)
     return map;
 }
 
+int is_host(int x, int y)
+{
+    return (x == 232 && y == 0);
+}
+
 void load_tilemap(game_instance *game)
 {
     int **layer1 = csv_to_array("./res/tilemap_layer_1.csv");
     int **layer2 = csv_to_array("./res/tilemap_layer_2.csv");
     int i = 0;
     int j = 0;
-    int x;
-    int y;
 
     while (i < game->tilemap.rows) {
         j = 0;
         while (j < game->tilemap.cols) {
-            x = layer1[i][j];
-            y = layer2[i][j];
-            if (x > 0)
-                game->tilemap.layer1[i][j].rect = get_tile(game->tileset.tile_size, x, 23);
-            if (y > 0)
-                game->tilemap.layer2[i][j].rect = get_tile(game->tileset.tile_size, y, 23);
-            if (x == 232 && y == 0)
-                game->tilemap.layer1[i][j].is_tower_host = sfTrue;
-            else
-                game->tilemap.layer1[i][j].is_tower_host = sfFalse;
-            if (x == 258)
-                game->tilemap.layer1[i][j].is_path = sfTrue;
-            else
-                game->tilemap.layer1[i][j].is_path = sfFalse;
+            game->tilemap.layer1[i][j].rect =
+                get_tile(game->tileset.tile_size, layer1[i][j], 23);
+            game->tilemap.layer2[i][j].rect =
+                get_tile(game->tileset.tile_size, layer2[i][j], 23);
+            game->tilemap.layer1[i][j].is_tower_host =
+                is_host(layer1[i][j], layer2[i][j]);
+            game->tilemap.layer1[i][j].is_path = (layer1[i][j] == 258);
             j++;
         }
         i++;
@@ -60,9 +56,11 @@ void load_tilemap(game_instance *game)
 
 void init_tilemap(game_instance *game)
 {
-    game->tileset.tileset = sfTexture_createFromFile("./res/tileset.png", NULL);
+    game->tileset.texture = sfTexture_createFromFile("./res/tileset.png",
+                                                    NULL);
     game->tilemap.tile_sprite = sfSprite_create();
-    sfSprite_setTexture(game->tilemap.tile_sprite, game->tileset.tileset, sfTrue);
+    sfSprite_setTexture(game->tilemap.tile_sprite,
+                        game->tileset.texture, sfTrue);
     game->tilemap.rows = 18;
     game->tilemap.cols = 32;
     game->tileset.tile_size = 32;

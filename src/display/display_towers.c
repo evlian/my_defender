@@ -8,7 +8,7 @@
 
 void draw_highlighted_tower(game_instance *game)
 {
-    sfVector2f pos = new_vector_2f(WINDOW_WIDTH / 2 - 160, WINDOW_HEIGHT - 64);
+    sfVector2f pos = new_vector_2f(W_WIDTH / 2 - 160, W_HEIGHT - 64);
     int i = 0;
 
     if (game->highlighted_tower == -1)
@@ -22,13 +22,14 @@ void draw_highlighted_tower(game_instance *game)
         pos.x += 80;
         i++;
     }
-    sfRenderWindow_drawRectangleShape(game->window, game->shapes.tower_highlighter, NULL);
+    sfRenderWindow_drawRectangleShape(game->window,
+                                    game->shapes.tower_highlighter, NULL);
 }
 
 void display_tower_choices(game_instance *game)
 {
     tower *t = game->tower_choices;
-    sfVector2f tower_pos = new_vector_2f(WINDOW_HEIGHT / 2 + 87, WINDOW_HEIGHT - 64);
+    sfVector2f tower_pos = new_vector_2f(W_HEIGHT / 2 + 87, W_HEIGHT - 64);
     sfVector2f price_pos = new_vector_2f(tower_pos.x + 2, tower_pos.y + 47);
     sfVector2f name_pos = new_vector_2f(tower_pos.x - 5, tower_pos.y + 37);
 
@@ -41,9 +42,8 @@ void display_tower_choices(game_instance *game)
         sfText_setPosition(game->text, price_pos);
         display_number(game, t->price);
         sfRenderWindow_drawSprite(game->window, game->sprites.tower, NULL);
-        sfText_setColor(game->text, sfRed);
-        if (game->money >= t->price)
-            sfText_setColor(game->text, sfGreen);
+        sfText_setColor(game->text,
+                        (game->money >= t->price) ? sfGreen : sfRed);
         sfText_setCharacterSize(game->text, 10);
         sfText_setPosition(game->text, name_pos);
         sfText_setString(game->text, t->name);
@@ -57,12 +57,13 @@ void display_tower_choices(game_instance *game)
 
 void display_tower_bar(game_instance *game)
 {
-    sfRenderWindow_drawRectangleShape(game->window, game->shapes.tower_bar, NULL);
+    sfRenderWindow_drawRectangleShape(game->window,
+                                    game->shapes.tower_bar, NULL);
     display_tower_choices(game);
     draw_highlighted_tower(game);
 }
 
-void display_laser(game_instance *game, tower *tower)
+void draw_laser(game_instance *game, tower *tower)
 {
     enemy *head = game->enemies;
 
@@ -74,16 +75,17 @@ void display_laser(game_instance *game, tower *tower)
             game->shapes.point_one.position.y += 20;
             game->shapes.point_two.position.x += 20;
             game->shapes.point_two.position.y += 20;
-            sfVertexArray_clear(game->shapes.line);
-            sfVertexArray_append(game->shapes.line, game->shapes.point_one);
-            sfVertexArray_append(game->shapes.line, game->shapes.point_two);
-            sfRenderWindow_drawVertexArray(game->window, game->shapes.line, NULL);
+            sfVertexArray_clear(game->shapes.laser);
+            sfVertexArray_append(game->shapes.laser, game->shapes.point_one);
+            sfVertexArray_append(game->shapes.laser, game->shapes.point_two);
+            sfRenderWindow_drawVertexArray(game->window,
+                                            game->shapes.laser, NULL);
         }
         head = head->next;
     }
 }
 
-void display_cold_circle(game_instance *game, tower *tower)
+void draw_winter_circle(game_instance *game, tower *tower)
 {
     enemy *head = game->enemies;
     sfVector2f pos = tower->position;
@@ -94,7 +96,8 @@ void display_cold_circle(game_instance *game, tower *tower)
         if (in_circle(tower->position, tower->radius, head->position)) {
             sfCircleShape_setRadius(game->shapes.winter, tower->radius);
             sfCircleShape_setPosition(game->shapes.winter, pos);
-            sfRenderWindow_drawCircleShape(game->window, game->shapes.winter, NULL);
+            sfRenderWindow_drawCircleShape(game->window,
+                                            game->shapes.winter, NULL);
             break;
         }
         head = head->next;
@@ -108,9 +111,9 @@ void display_towers(game_instance *game)
     display_tower_bar(game);
     while (head != NULL) {
         if (head->attack_type == ATK_LASER)
-            display_laser(game, head);
+            draw_laser(game, head);
         else if (head->attack_type == ATK_SLOW_DOWN)
-            display_cold_circle(game, head);
+            draw_winter_circle(game, head);
         sfSprite_setTextureRect(game->sprites.tower, head->texture);
         sfSprite_setPosition(game->sprites.tower, head->position);
         sfSprite_setColor(game->sprites.tower, head->color);

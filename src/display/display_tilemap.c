@@ -25,12 +25,14 @@ void display_selected_tower(game_instance *game, tile tile)
     if (!game->build_mode)
         return;
     if (tile.is_selected) {
-        sfSprite_setTextureRect(game->tilemap.tile_sprite, game->selected_tower->texture);
+        sfSprite_setTextureRect(game->tilemap.tile_sprite,
+                                game->selected_tower->texture);
         if (tile.is_tower_host)
             sfSprite_setColor(game->tilemap.tile_sprite, sfGreen);
         else
             sfSprite_setColor(game->tilemap.tile_sprite, sfRed);
-        sfRenderWindow_drawSprite(game->window, game->tilemap.tile_sprite, NULL);
+        sfRenderWindow_drawSprite(game->window,
+                                game->tilemap.tile_sprite, NULL);
         sfSprite_setColor(game->tilemap.tile_sprite, sfWhite);
     }
 }
@@ -43,11 +45,16 @@ void display_tilemap(game_instance *game)
     while (i < game->tilemap.rows) {
         j = 0;
         while (j < game->tilemap.cols) {
-            sfSprite_setTextureRect(game->tilemap.tile_sprite, game->tilemap.layer1[i][j].rect);
-            sfSprite_setPosition(game->tilemap.tile_sprite, new_vector_2f(j * 32, i * 32));
-            sfRenderWindow_drawSprite(game->window, game->tilemap.tile_sprite, NULL);
-            sfSprite_setTextureRect(game->tilemap.tile_sprite, game->tilemap.layer2[i][j].rect);
-            sfRenderWindow_drawSprite(game->window, game->tilemap.tile_sprite, NULL);
+            sfSprite_setTextureRect(game->tilemap.tile_sprite,
+                                    game->tilemap.layer1[i][j].rect);
+            sfSprite_setPosition(game->tilemap.tile_sprite,
+                                new_vector_2f(j * 32, i * 32));
+            sfRenderWindow_drawSprite(game->window,
+                                    game->tilemap.tile_sprite, NULL);
+            sfSprite_setTextureRect(game->tilemap.tile_sprite,
+                                    game->tilemap.layer2[i][j].rect);
+            sfRenderWindow_drawSprite(game->window,
+                                    game->tilemap.tile_sprite, NULL);
             display_selected_tower(game, game->tilemap.layer1[i][j]);
             j++;
         }

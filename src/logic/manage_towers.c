@@ -6,7 +6,8 @@
 */
 #include "../../include/defender.h"
 
-tower add_tower_choice(game_instance *game, sfIntRect t, int atk, int r, int atk_tp, int price, char *name, sfColor color)
+tower add_tower_choice(game_instance *game, sfIntRect t, int atk, int r,
+                        int atk_tp, int price, char *name, sfColor color)
 {
     tower *new = (tower *) malloc(sizeof(tower));
 

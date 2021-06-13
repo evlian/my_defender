@@ -6,12 +6,7 @@
 */
 #include "../../include/defender.h"
 
-int compare_vectors(sfVector2f a, sfVector2f b)
-{
-    return (a.x - b.x) + (a.y - b.y);
-}
-
-int compare(sfVector2f a, sfVector2f b)
+int contains(sfVector2f a, sfVector2f b)
 {
     sfIntRect rect = vector_to_rect(b, 32, 32);
 
@@ -23,7 +18,7 @@ void hit_target(game_instance *game)
     bullet *temp = game->bullets;
     bullet *prev;
 
-    while (temp != NULL && (compare(temp->position, temp->target->position)
+    while (temp != NULL && (contains(temp->position, temp->target->position)
                             || temp->target->position.y <= 0
                             || temp->target->position.x <= 0)) {
         game->bullets = temp->next;
@@ -31,9 +26,10 @@ void hit_target(game_instance *game)
         temp = game->bullets;
     }
     while (temp != NULL) {
-        while (temp != NULL && !compare(temp->position, temp->target->position)
-                            && temp->target->position.y > 0 &&
-                            temp->target->position.x > 0) {
+        while (temp != NULL &&
+                !contains(temp->position, temp->target->position)
+                && temp->target->position.y > 0 &&
+                temp->target->position.x > 0) {
             prev = temp;
             temp = temp->next;
         }

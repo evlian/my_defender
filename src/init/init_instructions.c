@@ -8,13 +8,15 @@
 
 void init_panel(game_instance *game)
 {
-    game->shapes.panel = sfRectangleShape_create();
-    sfRectangleShape_setSize(game->shapes.panel, new_vector_2f(800, 320));
-    sfRectangleShape_setPosition(game->shapes.panel,
-                                new_vector_2f(WINDOW_WIDTH / 2 - 400,
-                                            WINDOW_HEIGHT / 2 - 150));
-    sfRectangleShape_setFillColor(game->shapes.panel, new_color(0x3c, 0x8d, 0xad, 225));
-    sfRectangleShape_setScale(game->shapes.panel, new_vector_2f(0.2, 0.2));
+    game->shapes.info_panel = sfRectangleShape_create();
+    sfRectangleShape_setSize(game->shapes.info_panel, new_vector_2f(800, 320));
+    sfRectangleShape_setPosition(game->shapes.info_panel,
+                                new_vector_2f(W_WIDTH / 2 - 400,
+                                            W_HEIGHT / 2 - 150));
+    sfRectangleShape_setFillColor(game->shapes.info_panel,
+                                new_color(60, 141, 173, 225));
+    sfRectangleShape_setScale(game->shapes.info_panel,
+                                new_vector_2f(0.2, 0.2));
 }
 
 void init_instructions(game_instance *game)

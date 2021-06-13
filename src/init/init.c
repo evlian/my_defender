@@ -9,14 +9,15 @@
 void init_window(game_instance *game)
 {
     game->window = sfRenderWindow_create(
-        new_video_mode(WINDOW_WIDTH, WINDOW_HEIGHT, BITS_PER_PIXEL),
+        new_video_mode(W_WIDTH, W_HEIGHT, BITS_PER_PIXEL),
         GAME_TITLE, sfTitlebar | sfClose , NULL);
     sfRenderWindow_setFramerateLimit(game->window, FRAME_RATE);
     game->icon = sfImage_createFromFile("./res/icon.png");
-    sfRenderWindow_setIcon(game->window, 512, 512, sfImage_getPixelsPtr(game->icon));
+    sfRenderWindow_setIcon(game->window, 512, 512,
+                            sfImage_getPixelsPtr(game->icon));
 }
 
-void init_settings(game_instance *game)
+void set_settings(game_instance *game)
 {
     game->build_mode = sfFalse;
     game->show_instructions = sfFalse;
@@ -29,9 +30,10 @@ void init_settings(game_instance *game)
 
 void init(game_instance *game)
 {
+    srand((unsigned long)&game);
     game->score = 0;
     game->state = ST_INTRO;
-    init_settings(game);
+    set_settings(game);
     init_scoreboard(game);
     init_window(game);
     init_sounds(game);
@@ -46,4 +48,5 @@ void init(game_instance *game)
     init_enemies(game);
     init_bullets(game);
     init_game_over(game);
+    sfSound_play(game->sounds.intro_music);
 }

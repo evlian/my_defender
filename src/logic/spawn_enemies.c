@@ -6,6 +6,17 @@
 */
 #include "../../include/defender.h"
 
+void increase_spawn_health(game_instance *game, float m)
+{
+    enemy *head = game->enemy_types;
+
+    while (head != NULL) {
+        printf("%f\n", head->max_health);
+        head->max_health *= m;
+        head = head->next;
+    }
+}
+
 void spawn_enemies(game_instance *game)
 {
     if (sfTime_asSeconds(sfClock_getElapsedTime(game->spawn_clock)) < 0.5)
@@ -14,7 +25,7 @@ void spawn_enemies(game_instance *game)
     if (game->enemies == NULL) {
         game->enemy_wave *= 1.2;
         game->amount_of_enemies = game->enemy_wave;
-        game->enemy_health *= 1.1;
+       increase_spawn_health(game, 1.2);
     }
     if (game->amount_of_enemies > 0) {
         game->amount_of_enemies--;

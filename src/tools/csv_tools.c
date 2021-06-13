@@ -5,40 +5,9 @@
 ** csv_tools
 */
 #include "../../include/my.h"
-
-int **init_2d_array(int rows, int cols)
-{
-    int i = 0;
-    int j = 0;
-    int **array = malloc(sizeof(int *) * rows);
-
-    while (i < rows) {
-        array[i] = malloc(sizeof(int) * cols + 1);
-        j = 0;
-        while (j < cols) {
-            array[i][j] = 0;
-            j++;
-        }
-        array[i][j] = -1;
-        i++;
-    }
-    return array;
-}
-
-int get_file_size(char const *file_path)
-{
-    int size;
-    struct stat buf;
-
-    if (stat(file_path, &buf) == -1)
-        return -1;
-    return buf.st_size;
-}
-
-int is_digit(char c)
-{
-    return (c >= '0' && c <= '9');
-}
+int **init_2d_array(int rows, int cols);
+int get_file_size(char const *file_path);
+char *read_file(char *file_path);
 
 int get_num_len(char const *str)
 {
@@ -97,18 +66,6 @@ int get_rows_len(char *string)
         i++;
     }
     return (len == 0) ? 1 : len;
-}
-
-char *read_file(char *file_path)
-{
-    int fd = open(file_path, O_RDONLY);
-    int size = get_file_size(file_path);
-    char *temp = malloc(sizeof(char) * size + 1);
-
-    temp[size] = '\0';
-    read(fd, temp, size);
-    close(fd);
-    return temp;
 }
 
 int **csv_to_array(char *file_path)

@@ -13,12 +13,13 @@ int **init_2d_array(int rows, int cols)
     int **array = malloc(sizeof(int *) * rows);
 
     while (i < rows) {
-        array[i] = malloc(sizeof(int) * cols);
+        array[i] = malloc(sizeof(int) * cols + 1);
         j = 0;
         while (j < cols) {
             array[i][j] = 0;
             j++;
         }
+        array[i][j] = -1;
         i++;
     }
     return array;

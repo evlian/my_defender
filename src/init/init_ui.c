@@ -8,7 +8,13 @@
 
 void init_button_functions(game_instance *game)
 {
-
+    game->buttons.play.on_click = &play_button;
+    game->buttons.quit.on_click = &dispose;
+    game->buttons.resume.on_click = &resume_button;
+    game->buttons.restart.on_click = &restart_button;
+    game->buttons.main_menu.on_click = &main_menu_button;
+    game->buttons.instructions.on_click = &toggle_instructions;
+    game->buttons.scores.on_click = &toggle_scoreboard;
 }
 
 void init_menus(game_instance *game)
@@ -38,13 +44,8 @@ void init_buttons(game_instance *game)
     game->buttons.scores.text = "SCOREBOARD";
     game->buttons.restart.text = "RESTART";
     game->buttons.main_menu.text = "MAIN MENU";
-    game->buttons.play.on_click = &play_button;
-    game->buttons.quit.on_click = &dispose;
-    game->buttons.resume.on_click = &resume_button;
-    game->buttons.restart.on_click = &restart_button;
-    game->buttons.main_menu.on_click = &main_menu_button;
-    game->buttons.instructions.on_click = &toggle_instructions;
-    game->buttons.scores.on_click = &toggle_scoreboard;
+    game->buttons.settings.text = "SETTINGS";
+    init_button_functions(game);
 }
 
 void init_ui(game_instance *game)

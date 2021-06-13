@@ -29,11 +29,14 @@ int is_dead_end(game_instance *game, int direction, sfVector2f position)
     position.y /= game->tileset.tile_size;
     switch (direction) {
         case DIR_UP:
-            return !is_path_tile(game, new_vector_2i(position.x, position.y - 1));
+            return !is_path_tile(game,
+                                new_vector_2i(position.x, position.y - 1));
         case DIR_RIGHT:
-            return !is_path_tile(game, new_vector_2i(position.x + 1, position.y));
+            return !is_path_tile(game,
+                                new_vector_2i(position.x + 1, position.y));
         case DIR_DOWN:
-            return !is_path_tile(game, new_vector_2i(position.x, position.y + 1));
+            return !is_path_tile(game,
+                                new_vector_2i(position.x, position.y + 1));
         default:
             return 0;
     }
@@ -57,8 +60,8 @@ float check_slow_attack(game_instance *game, enemy *enemy)
 void move_enemies(game_instance *game)
 {
     enemy *head = game->enemies;
-    int dir;
     float speed;
+    int arr[2][4] = {{1, 0, 0, -1}, {0, -1, 1, 0}};
 
     while (head != NULL) {
         if (is_game_over(game, head->position)) {
@@ -67,19 +70,12 @@ void move_enemies(game_instance *game)
             return;
         }
         animate_enemy(head);
-        dir = head->direction;
         speed = (float) head->speed / check_slow_attack(game, head);
-        head->texture_rect.top = head->direction * 32;
-        if (is_dead_end(game, head->direction, head->position)) {
-            dir = game->tilemap.path[head->path_index++];
-            head->direction = dir;
-        }
-        if (dir == DIR_UP)
-            head->position.y -= speed;
-        else if (dir == DIR_RIGHT)
-            head->position.x += speed;
-        else if (dir == DIR_DOWN)
-            head->position.y += speed;
+        head->texture_rect.top = (head->direction + (head->type * 4)) * 32;
+        if (is_dead_end(game, head->direction, head->position))
+            head->direction = game->tilemap.path[head->path_index++];
+        head->position.y += arr[0][head->direction] * head->speed;
+        head->position.x += arr[1][head->direction] * head->speed;
         head = head->next;
     }
 }

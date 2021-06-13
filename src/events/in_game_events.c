@@ -12,11 +12,13 @@ void set_selected_tile(game_instance *game)
     sfVector2i x = game->tilemap.last_selected;
 
     if (game->event.type == sfEvtMouseMoved && game->build_mode) {
-        if (mouse.y < WINDOW_HEIGHT && mouse.x < WINDOW_WIDTH) {
+        if (mouse.y < W_HEIGHT && mouse.x < W_WIDTH) {
             game->tilemap.layer1[x.y][x.x].is_selected = 0;
             game->tilemap.layer1[mouse.y / 32][mouse.x / 32].is_selected = 1;
-            set_vector_2i(&game->tilemap.last_selected,  mouse.y / 32, mouse.x / 32);
-            set_vector_2f(&game->selected_tower->position, (mouse.y / 32) * 32, (mouse.x / 32) * 32);
+            set_vector_2i(&game->tilemap.last_selected,
+                        mouse.y / 32, mouse.x / 32);
+            set_vector_2f(&game->selected_tower->position,
+                        (mouse.y / 32) * 32, (mouse.x / 32) * 32);
         }
     }
 }
@@ -38,12 +40,14 @@ void manage_build_tower_event(game_instance *game)
 
 void select_tower_event(game_instance *game)
 {
-    sfIntRect rect = vector_to_rect(new_vector_2f(WINDOW_WIDTH / 2 - 160, WINDOW_HEIGHT - 64), 80, 64);
+    sfIntRect rect = vector_to_rect(new_vector_2f(W_WIDTH / 2 - 160,
+                                                W_HEIGHT - 64), 80, 64);
     tower *head = game->tower_choices;
     sfVector2i mouse = sfMouse_getPositionRenderWindow(game->window);
 
     while (head != NULL) {
-        if(sfIntRect_contains(&rect, mouse.x, mouse.y) && game->money >= head->price) {
+        if(sfIntRect_contains(&rect, mouse.x, mouse.y) &&
+            game->money >= head->price) {
             game->selected_tower = head;
             game->build_mode = sfTrue;
             return;
@@ -55,7 +59,8 @@ void select_tower_event(game_instance *game)
 
 void hover_tower_selector_event(game_instance *game)
 {
-    sfIntRect rect = vector_to_rect(new_vector_2f(WINDOW_WIDTH / 2 - 160, WINDOW_HEIGHT - 64), 80, 64);
+    sfIntRect rect = vector_to_rect(new_vector_2f(W_WIDTH / 2 - 160,
+                                                W_HEIGHT - 64), 80, 64);
     sfVector2i mouse = sfMouse_getPositionRenderWindow(game->window);
     int i = 0;
 
@@ -88,6 +93,8 @@ void manage_in_game_events(game_instance *game)
     if (game->event.type == sfEvtKeyPressed) {
         if (game->event.key.code == sfKeyA)
             add_enemy(game);
+        if (game->event.key.code == sfKeyM)
+            game->money += 500;
         manage_pause_event(game);
     }
 }
