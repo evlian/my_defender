@@ -11,7 +11,6 @@ void increase_spawn_health(game_instance *game, float m)
     enemy *head = game->enemy_types;
 
     while (head != NULL) {
-        printf("%f\n", head->max_health);
         head->max_health *= m;
         head = head->next;
     }
